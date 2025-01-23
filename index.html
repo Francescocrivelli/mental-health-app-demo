@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mental Health App Prototype</title>
+  <style>
+    /* Global Styles */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: #F7F7F7;
+      color: #333;
+    }
+    h1, h2, h3 {
+      margin-bottom: 0.5em;
+    }
+    button {
+      cursor: pointer;
+      background: #58b8ac; /* Soft teal */
+      color: #fff;
+      border: none;
+      padding: 0.7em 1.2em;
+      border-radius: 5px;
+      margin: 0.3em;
+    }
+    button:hover {
+      background: #4aa499;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 2em;
+      text-align: center;
+    }
+    .hidden {
+      display: none;
+    }
+    /* Simple top navigation bar */
+    .top-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fff;
+      border-bottom: 1px solid #e2e2e2;
+      padding: 1em;
+    }
+    .top-nav .logo {
+      font-weight: bold;
+      color: #58b8ac;
+    }
+    .top-nav .profile {
+      font-size: 0.9em;
+      color: #555;
+      cursor: pointer;
+    }
+    /* Screen-specific styling */
+    #welcomeScreen {
+      background: #FAFAFA;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+    #dashboardScreen, #supportScreen {
+      min-height: 100vh;
+      background: #FAFAFA;
+    }
+    /* Chat area */
+    .chat-box {
+      background: #fff;
+      border-radius: 5px;
+      padding: 1em;
+      margin-top: 1em;
+      text-align: left;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+    .chat-message {
+      margin-bottom: 0.8em;
+      line-height: 1.4em;
+    }
+    .chat-message.user {
+      text-align: right;
+      color: #58b8ac;
+    }
+    .chat-input-area {
+      margin-top: 1em;
+    }
+    /* Mood history */
+    .mood-history {
+      background: #fff;
+      border-radius: 5px;
+      padding: 1em;
+      margin: 1em 0;
+      text-align: left;
+    }
+    .mood-item {
+      padding: 0.3em 0;
+    }
+    /* Support section */
+    .support-options {
+      margin-top: 2em;
+    }
+    .resource-list {
+      text-align: left;
+      margin-top: 1em;
+    }
+    .resource-list li {
+      margin: 0.5em 0;
+    }
+    /* Footer disclaimer (optional) */
+    .footer {
+      margin-top: 2em;
+      font-size: 0.8em;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Welcome / Onboarding Screen -->
+  <div id="welcomeScreen" class="container">
+    <h1>Welcome to Your Daily Support</h1>
+    <p>We’re here to help you start your day feeling your best.</p>
+    <div style="margin: 2em 0;">
+      <button onclick="showScreen('dashboardScreen')">Sign Up</button>
+      <button onclick="showScreen('dashboardScreen')">Log In</button>
+    </div>
+    <p style="font-size:0.9em; color:#999;">
+      (Demo note: Both Sign Up and Log In go to the same dashboard screen.)
+    </p>
+  </div>
+
+  <!-- Dashboard / Daily Check-In Screen -->
+  <div id="dashboardScreen" class="hidden">
+    <div class="top-nav">
+      <div class="logo">Daily Support</div>
+      <div class="profile" onclick="alert('Profile / Settings Placeholder')">My Profile</div>
+    </div>
+    <div class="container">
+      <h2>Good Morning!</h2>
+      <p>How are you feeling today?</p>
+
+      <div style="margin:1em 0;">
+        <!-- Quick Mood Buttons -->
+        <button onclick="userResponse('Great')">Great</button>
+        <button onclick="userResponse('Okay')">Okay</button>
+        <button onclick="userResponse('Not so good')">Not so good</button>
+      </div>
+
+      <!-- Chat / AI Conversation -->
+      <div class="chat-box" id="chatBox">
+        <!-- AI and user messages will be appended here -->
+      </div>
+
+      <!-- Optional text input area (if user wants to type a custom message) -->
+      <div class="chat-input-area">
+        <input type="text" id="userInput" placeholder="Type your thoughts..." style="width:70%; padding:0.5em;" />
+        <button onclick="sendCustomMessage()">Send</button>
+      </div>
+
+      <!-- Mood History Section -->
+      <div class="mood-history">
+        <h3>Past Check-ins</h3>
+        <div id="moodHistoryList">
+          <p class="mood-item">No history yet.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Support & Call Screen -->
+  <div id="supportScreen" class="hidden">
+    <div class="top-nav">
+      <div class="logo" onclick="showScreen('dashboardScreen')" style="cursor:pointer;">Daily Support</div>
+      <div class="profile" onclick="alert('Profile / Settings Placeholder')">My Profile</div>
+    </div>
+    <div class="container">
+      <h2>We’re here for you!</h2>
+      <p>Would you like to talk to someone?</p>
+
+      <div class="support-options">
+        <button onclick="triggerCall('now')">Call Me Now</button>
+        <button onclick="triggerCall('schedule')">Schedule a Call</button>
+      </div>
+
+      <div id="callStatus" style="margin-top:1em; font-weight:bold;"></div>
+
+      <ul class="resource-list">
+        <li><strong>Crisis Hotline (24/7):</strong> 1-800-123-4567</li>
+        <li><strong>Text Support:</strong> Text “HELLO” to 741741</li>
+        <li><strong>More Resources:</strong> <a href="#" target="_blank">Visit Our Resource Page</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer container">
+    <p>Disclaimer: This demo does not provide real medical or mental health services.</p>
+  </div>
+
+  <script>
+    // Simple global state for demonstration
+    let moodHistory = [];
+
+    // Show/hide screens
+    function showScreen(screenId) {
+      // Hide all screens
+      document.getElementById('welcomeScreen').classList.add('hidden');
+      document.getElementById('dashboardScreen').classList.add('hidden');
+      document.getElementById('supportScreen').classList.add('hidden');
+
+      // Show the requested screen
+      document.getElementById(screenId).classList.remove('hidden');
+    }
+
+    // Append message to chat box
+    function appendChatMessage(sender, text) {
+      const chatBox = document.getElementById('chatBox');
+      const msgDiv = document.createElement('div');
+      msgDiv.classList.add('chat-message');
+      if (sender === 'user') {
+        msgDiv.classList.add('user');
+      }
+      msgDiv.innerText = text;
+      chatBox.appendChild(msgDiv);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    // Handle user clicking quick mood button
+    function userResponse(mood) {
+      // User's mood goes into chat
+      appendChatMessage('user', mood);
+
+      // Save mood to history
+      saveMood(mood);
+
+      // AI response logic (very simple)
+      let aiResponse = '';
+      if (mood === 'Great') {
+        aiResponse = "That's awesome! Keep up the positive energy. Anything on your mind?";
+      } else if (mood === 'Okay') {
+        aiResponse = "Got it. I'm here if you'd like to share more!";
+      } else if (mood === 'Not so good') {
+        aiResponse = "I’m sorry to hear that. Let’s get some help. Moving you to the support screen...";
+        setTimeout(() => {
+          showScreen('supportScreen');
+        }, 2000);
+      }
+
+      appendChatMessage('ai', aiResponse);
+    }
+
+    // Save mood to history array and refresh display
+    function saveMood(mood) {
+      const date = new Date().toLocaleDateString();
+      moodHistory.push({ date, mood });
+      updateMoodHistory();
+    }
+
+    function updateMoodHistory() {
+      const moodHistoryList = document.getElementById('moodHistoryList');
+      moodHistoryList.innerHTML = '';
+      moodHistory.forEach(entry => {
+        let p = document.createElement('p');
+        p.classList.add('mood-item');
+        p.innerText = `${entry.date}: ${entry.mood}`;
+        moodHistoryList.appendChild(p);
+      });
+    }
+
+    // Send a custom typed message
+    function sendCustomMessage() {
+      const input = document.getElementById('userInput');
+      if (!input.value.trim()) return;
+
+      // Display user message
+      appendChatMessage('user', input.value);
+
+      // Simple AI response
+      const response = "Thanks for sharing. Let me know if you want additional support.";
+      appendChatMessage('ai', response);
+
+      input.value = '';
+    }
+
+    // Trigger call simulation
+    function triggerCall(type) {
+      const callStatus = document.getElementById('callStatus');
+      if (type === 'now') {
+        callStatus.innerText = "Initiating call... (demo only)";
+      } else {
+        callStatus.innerText = "Call scheduled. We’ll reach out soon. (demo only)";
+      }
+    }
+  </script>
+</body>
+</html>
